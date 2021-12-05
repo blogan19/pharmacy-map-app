@@ -1,73 +1,7 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-       <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-        <!-- jQuery library -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <!-- Popper JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <!-- Latest compiled JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-        <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    </head>
-    <body> 
-            <nav class="navbar navbar-light bg-light">
-                <a class="navbar-brand" href="#">
-                UK Pharmacies Map
-                </a>
-            </nav>
+{% extends "layout.html" %}
+{% block content %}   
             <br/>
-            <div class="modal" id="tableModal">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h4 class="modal-title">Local Pharmacies</h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        <table class="table table-striped"> 
-                            <thead>
-                                <tr> 
-                                    <th> Pharmacy</th>
-                                    <th> Address </th>
-                                    <th> Number of Items for Month of August 21 </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if local_table is defined %}
-                                    {% for key, value in local_table.items() %}
-                                        {% if value['selected_pharm'] == True %}
-                                            <tr style="background-color: #5bc0de">
-                                        {% else %} 
-                                            <tr>
-                                        {% endif %}
-                                                <td>{{value['ContractorName'] }}  ({{value["ContractorCode"]}}) </td>
-                                                <td>{{value["Address"]}}</td>
-                                                <td>{{value['NumberofItems']}}</td>
-                                            </tr>
-                                    {% endfor %}
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    </div>
-              
-                  </div>
-                </div>
-              </div>
             <div class="container">
-                
-        
                 <div class="card card-outline-secondary">
                     <div class="card-header">
                         <h3 class="mb-0"> Select A Pharmacy</h3>
@@ -84,8 +18,9 @@
                                 </select>
                                 <div class="invalid-feedback">Please fill out this field.</div>
                             </div>
-                            <label>Radius</label>
+                            <label>Search Radius</label>
                             <div class="form-group">
+                                
                                 <div class="form-check form-check-inline">
                                     <label class="form-check-label">
                                         <input class="form-check-input" type="radio" name="distance_radio" id="inlineRadio1" value="1000" checked="checked"> 1km
@@ -108,17 +43,46 @@
                 </div>    
                 <br/>
                 {% for message in get_flashed_messages()%}
-                <div class="alert alert-info">
-                    <strong>{{message}}</strong> 
-                </div>    
+                        <div class="alert alert-info">
+                            <strong>{{message}}</strong> 
+                        </div>  
+                {% endfor %}                          
                 <div class="container">
-                    {% endfor %}
+                    
                 </div>
             </div>
-    
-            
-        <!--<iframe frameborder='0' noresize='noresize' style='position: absolute; background: transparent; width: 100%; height:100%;' src="render_map" frameborder="0"></iframe>-->
-        {% extends 'map.html' %}
+            <div class="container">    
+                {{html_map | safe}}
+            </div>
+            <hr>
+            {% if local_table is defined %}
+                <div class="container">
+                    <table class="table table-striped"> 
+                        <thead>
+                            <tr> 
+                                <th> Pharmacy</th>
+                                <th> Address </th>
+                                <th> Number of Items for Month of August 21 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                                {% for key, value in local_table.items() %}
+                                    {% if value['selected_pharm'] == True %}
+                                        <tr style="background-color: #5bc0de">
+                                    {% else %} 
+                                        <tr>
+                                    {% endif %}
+                                            <td>{{value['ContractorName'] }}  ({{value["ContractorCode"]}}) </td>
+                                            <td>{{value["Address"]}}</td>
+                                            <td>{{value['NumberofItems']}}</td>
+                                        </tr>
+                                {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+{% endblock content %}                 
        
-    </body>
-</html>
+    

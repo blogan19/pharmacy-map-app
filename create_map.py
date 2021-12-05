@@ -43,37 +43,29 @@ def create_map(code,distance):
             color = 'white'
         
         #html for marker popup
-        marker_html = folium.Html(f'{mindistance.iloc[i]["ContractorName"]}  {mindistance.iloc[i]["TotalnumberofPrescriptions(ProfessionalFees)"]} <a data-target="#tableModal" data-toggle="modal" class="MainNavText" id="MainNavHelp" href="#tableModal"> See Local Table </a>',script=True)
+        marker_html = folium.Html(f'{mindistance.iloc[i]["ContractorName"]} {mindistance.iloc[i]["Postcode"]} <br/> Total Items for August 21: {mindistance.iloc[i]["TotalnumberofPrescriptions(ProfessionalFees)"]}',script=True)
         
         #Create markers
         folium.Marker(
             location=[mindistance.iloc[i]['lat'], mindistance.iloc[i]['long']],
-            popup=folium.Popup(marker_html),
+            popup=folium.Popup(marker_html,max_width=200),
             icon=folium.Icon(color=color,icon_color=icon_color, icon='plus-square',prefix='fa')
         ).add_to(map)
-    
-    #Overwrite map.html file
-    map.save("templates/map.html")
 
     #Create a dictionary summary of data to use to create table
     df_total = mindistance[['ContractorName','Address', 'ContractorCode','NumberofItems','selected_pharm']].copy()
     df_total = df_total.sort_values('NumberofItems', ascending=False)
     total_dict = df_total.to_dict('index')
 
-   
-
-    #Return the saved pharmacy details  and dictionary 
-    return (f' {pharm["ContractorName"].values[0]}, {pharm["Address"].values[0]}, {pharm["Postcode"].values[0]}',total_dict)
+    #Return the saved pharmacy details and dictionary and map
+    return (f' {pharm["ContractorName"].values[0]}, {pharm["Address"].values[0]}, {pharm["Postcode"].values[0]}',total_dict,map)
 
 #Calculates distances between coordinates using haversine formula
 def haversine(lon1, lat1, lon2, lat2):
     lon1, lat1, lon2, lat2 = map(np.radians, [lon1, lat1, lon2, lat2])
-
     dlon = lon2 - lon1
     dlat = lat2 - lat1
-
     a = np.sin(dlat/2.0)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2.0)**2
-
     c = 2 * np.arcsin(np.sqrt(a))
     km = 6367 * c
     return km
