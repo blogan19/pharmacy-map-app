@@ -42,17 +42,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for key, value in local_table.items() %}
-                                    {% if value['selected_pharm'] == True %}
-                                        <tr style="background-color: #5bc0de">
-                                    {% else %} 
-                                        <tr>
-                                    {% endif %}
-                                            <td>{{value['ContractorName'] }}  ({{value["ContractorCode"]}}) </td>
-                                            <td>{{value["Address"]}}</td>
-                                            <td>{{value['NumberofItems']}}</td>
-                                        </tr>
-                                {% endfor %}
+                                {% if local_table is defined %}
+                                    {% for key, value in local_table.items() %}
+                                        {% if value['selected_pharm'] == True %}
+                                            <tr style="background-color: #5bc0de">
+                                        {% else %} 
+                                            <tr>
+                                        {% endif %}
+                                                <td>{{value['ContractorName'] }}  ({{value["ContractorCode"]}}) </td>
+                                                <td>{{value["Address"]}}</td>
+                                                <td>{{value['NumberofItems']}}</td>
+                                            </tr>
+                                    {% endfor %}
+                                {% endif %}
                             </tbody>
                         </table>
                     </div>
