@@ -38,4 +38,4 @@ def render_map():
 def jupyter():
     return render_template("jupyter.html")
 
-app.run(port=5000, debug=True)
+#app.run(port=5000, debug=True)
