@@ -53,7 +53,7 @@ def create_map(code,distance):
         ).add_to(map)
     
     #Overwrite map.html file
-    map.save("Templates/map.html")
+    map.save("templates/map.html")
 
     #Create a dictionary summary of data to use to create table
     df_total = mindistance[['ContractorName','Address', 'ContractorCode','NumberofItems','selected_pharm']].copy()
