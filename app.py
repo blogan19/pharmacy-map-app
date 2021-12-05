@@ -33,4 +33,4 @@ def map():
 def render_map():
     return render_template("map.html")
 
-app.run(port=5000, debug=True)
+#app.run(port=5000, debug=True)
