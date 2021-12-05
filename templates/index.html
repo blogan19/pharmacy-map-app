@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+{% block content %}   
+            <br/>
+            <div class="container">
+                <div class="card card-outline-secondary">
+                    <div class="card-header">
+                        <h3 class="mb-0"> Select A Pharmacy</h3>
+                    </div>
+                    <div class="card-body">
+                        <form action="map" method="POST">
+                            <div class="form-group">
+                                <label for="pharm_select">Pharmacy</label>
+                                <select name="pharm_select" class="selectpicker" data-live-search="true" data-width="100%" required>
+                                    <option value = "" data-tokens="Select Pharmacy" selected disabled >Select Pharmacy from dropdown options </option>
+                                    {% for pharm in pharmacy_list_data %}
+                                        <option value="{{ pharm.ContractorCode }}" data-tokens="{{ pharm.ContractorCode }}">{{pharm.ContractorName}} ({{pharm.ContractorCode}}) {{pharm.Address}} {{pharm.town}} {{pharm.county}} {{pharm.city}} {{pharm.Postcode}}</option>
+                                    {% endfor %}
+                                </select>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                            <label>Search Radius</label>
+                            <div class="form-group">
+                                
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="distance_radio" id="inlineRadio1" value="1000" checked="checked"> 1km
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="distance_radio" id="inlineRadio1" value="5000" checked="checked"> 5km
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="radio" name="distance_radio" id="inlineRadio2" value="10000"> 10km
+                                    </label>
+                                </div>
+                            </div>
+                            <input type="submit" value="Search" id="pharmacy_btn" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>    
+                <br/>
+                {% for message in get_flashed_messages()%}
+                        <div class="alert alert-info">
+                            <strong>{{message}}</strong> 
+                        </div>  
+                {% endfor %}                          
+                <div class="container">
+                    
+                </div>
+            </div>
+            <div class="container">    
+                {{html_map | safe}}
+            </div>
+            <hr>
+            {% if local_table is defined %}
+                <div class="container">
+                    <table class="table table-striped"> 
+                        <thead>
+                            <tr> 
+                                <th> Pharmacy</th>
+                                <th> Address </th>
+                                <th> Number of Items for Month of August 21 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                                {% for key, value in local_table.items() %}
+                                    {% if value['selected_pharm'] == True %}
+                                        <tr style="background-color: #5bc0de">
+                                    {% else %} 
+                                        <tr>
+                                    {% endif %}
+                                            <td>{{value['ContractorName'] }}  ({{value["ContractorCode"]}}) </td>
+                                            <td>{{value["Address"]}}</td>
+                                            <td>{{value['NumberofItems']}}</td>
+                                        </tr>
+                                {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+{% endblock content %}                 
+       
+    
